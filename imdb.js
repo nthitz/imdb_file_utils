@@ -54,24 +54,35 @@ imdb.numExistingDataFiles = function numExistingDataFiles() {
   },0)
 }
 imdb.findCommonCast = function findCommonCast(ids,cb) {
-  console.log('common cast')
   if( ! _.isArray(ids)) {
     throw new Error('ids must be array')
   }
 
   var actorDataFiles = _.select(dataFiles,selectActorFiles);
-  _.each(actorDataFiles, findCommonCast, this)
-
-  function findCommonCast(dataFile, cb) {
+  var results = []
+  nextDataFile()
+  function nextDataFile() {
+    if(actorDataFiles.length === 0) {
+      end();
+      return
+    }
+    dataFileCommandCast(actorDataFiles[0])
+    actorDataFiles.splice(0,1)
+  }
+  function dataFileCommandCast(dataFile) {
     var f = byline(fs.createReadStream( dataFile.path, {
       encoding: 'utf-8'
     }))
     f.on('data', function(line) {
-    //  console.log(line)
+      // console.log(line)
     })
     f.on('end', function() {
-      cb()
+      nextDataFile()
     })
+  }
+  function end() {
+    console.log('end')
+    cb(null, results)
   }
 }
 
