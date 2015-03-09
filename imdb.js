@@ -112,18 +112,17 @@ imdb.findCommonCast = function findCommonCast(searchRoles,cb) {
         if(curActor === null) {
           return
         }
-        var matches = 0;
+        var matches = {};
         _.each(curActor.roles, function(role) {
           _.each(searchRoles, function(searchRole) {
-            console.log(searchRole + " " + role.name)
             if(searchRole === role.name) {
-              matches++
+              matches[searchRole] = true
+
             }
           })
         })
-        if(matches !== 0)
-          console.log(matches)
-        if(searchRoles.length === matches) {
+        var validMatches = Object.keys(matches)
+        if(searchRoles.length === validMatches.length) {
           results.push(curActor.name)
         }
       }
