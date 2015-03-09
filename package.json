@@ -9,7 +9,7 @@
   "keywords": [
     "imdb"
   ],
-  "author": "Nick Yahnke",
+  "author": "Nick Yahnke @nthitz",
   "license": "MIT",
   "dependencies": {
     "byline": "^4.2.1",
