@@ -25,7 +25,7 @@ describe('findCommonCast', function() {
   it('should find matchs', function(done) {
     var commonCastRequest = [
       "50 Cent: The New Breed",
-      "A Portrait of an Artist: The Making of 'Get Rich or Die Tryin"
+      "A Portrait of an Artist: The Making of 'Get Rich or Die Tryin'"
     ]
     imdb.findCommonCast(commonCastRequest, function(err, results) {
       console.log(arguments)

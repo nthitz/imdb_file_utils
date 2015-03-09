@@ -53,9 +53,9 @@ imdb.numExistingDataFiles = function numExistingDataFiles() {
     return sum + dataFile.exists ? 1 : 0
   },0)
 }
-imdb.findCommonCast = function findCommonCast(ids,cb) {
-  if( ! _.isArray(ids)) {
-    throw new Error('ids must be array')
+imdb.findCommonCast = function findCommonCast(searchRoles,cb) {
+  if( ! _.isArray(searchRoles)) {
+    throw new Error('searchRoles must be array')
   }
 
   var actorDataFiles = _.select(dataFiles,selectActorFiles);
@@ -70,11 +70,75 @@ imdb.findCommonCast = function findCommonCast(ids,cb) {
     actorDataFiles.splice(0,1)
   }
   function dataFileCommandCast(dataFile) {
+    console.log(dataFile)
+    var modes = {
+      HEADER: 'header',
+      DATA: 'data',
+      FOOTER: 'footer'
+    }
+    var mode = modes.HEADER
     var f = byline(fs.createReadStream( dataFile.path, {
       encoding: 'utf-8'
     }))
+    var prevLine = null;
+    var curActor = null;
     f.on('data', function(line) {
-      // console.log(line)
+      if(mode === modes.HEADER) {
+        var headerDonePrevLine = "Name\t\t\tTitles "
+        var headerDoneLine = "----\t\t\t------"
+        if(line === headerDoneLine && prevLine === headerDonePrevLine) {
+          mode = modes.DATA
+          return
+        }
+      } else if(mode === modes.DATA) {
+        var dataEndLine = '-----------------------------------------------------------------------------';
+        if(line === dataEndLine) {
+          mode = modes.FOOTER;
+          return
+        }
+        var isNewActorLine = line[0] !== '\t';
+        if(isNewActorLine) {
+          checkCurActor();
+          initNewActor()
+        }
+        addRoleToActor(line);
+
+      } else if(mode === modes.FOOTER) {
+      }
+
+      prevLine = line;
+
+      function checkCurActor() {
+        if(curActor === null) {
+          return
+        }
+        var matches = 0;
+        _.each(curActor.roles, function(role) {
+          _.each(searchRoles, function(searchRole) {
+            console.log(searchRole + " " + role.name)
+            if(searchRole === role.name) {
+              matches++
+            }
+          })
+        })
+        if(matches !== 0)
+          console.log(matches)
+        if(searchRoles.length === matches) {
+          results.push(curActor.name)
+        }
+      }
+      function initNewActor() {
+        curActor = {
+          name: line.split('\t')[0],
+          roles: []
+        }
+      }
+      function addRoleToActor() {
+
+        var role = imdb.parseRoleLine(line)
+        curActor.roles.push(role)
+        //console.log(role)
+      }
     })
     f.on('end', function() {
       nextDataFile()
