@@ -85,5 +85,38 @@ imdb.findCommonCast = function findCommonCast(ids,cb) {
     cb(null, results)
   }
 }
+imdb.parseRoleLine = function parseRoleLine(line) {
+  var lineParts = line.split('\t');
+  var roleText = lineParts[lineParts.length - 1]
+  var role = {}
+          //Title    Year          Ep Title    Number              Role
+  var re = /([^\(]+) \(([0-9]+)\) (\{([^\(]+ )?\(([^\)]+)\)\})? ? (\[([^\]]+)\])?/
+  var match = line.match(re)
+  if(match === null) {
+    throw new Error('parseRoleLine re doesn\'t match')
+  }
+  var nameIndex = 1;
+  var yearIndex = nameIndex + 1;
+  var episodeIndex = yearIndex + 1;
+  var episodeTitleIndex = episodeIndex + 1;
+  var episodeNumberIndex = episodeTitleIndex + 1;
+
+  var roleIndex = episodeNumberIndex + 2;
+  role.name = match[nameIndex];
+  role.year = match[yearIndex];
+
+  addToRoleIfDefined('role', roleIndex)
+  addToRoleIfDefined('episode', episodeTitleIndex)
+  addToRoleIfDefined('episodeNumber', episodeNumberIndex)
+
+  return role
+
+  function addToRoleIfDefined(key,index) {
+    if(typeof match[index] !== 'undefined') {
+      role[key] = match[index].trim()
+    }
+  }
+}
+
 
 module.exports = imdb;
