@@ -89,16 +89,16 @@ imdb.parseRoleLine = function parseRoleLine(line) {
   var lineParts = line.split('\t');
   var roleText = lineParts[lineParts.length - 1]
   var role = {}
-          //Title    Year          Ep Title    Number              Role
-  var re = /([^\(]+) \(([0-9]+)\) (\{([^\(]+ )?\(([^\)]+)\)\})? ? (\[([^\]]+)\])?/
-  var match = line.match(re)
+          //Title    Year          OptionalTV Ep Title     Number              Role
+  var re = /([^\(]+) \(([^\)]+)\) ?(\(T?V\) )?(\{([^\(]+ )?\(([^\)]+)\)\})? ? ?(\[([^\]]+)\])?/
+  var match = roleText.match(re)
   if(match === null) {
     throw new Error('parseRoleLine re doesn\'t match')
   }
   var nameIndex = 1;
   var yearIndex = nameIndex + 1;
   var episodeIndex = yearIndex + 1;
-  var episodeTitleIndex = episodeIndex + 1;
+  var episodeTitleIndex = episodeIndex + 2;
   var episodeNumberIndex = episodeTitleIndex + 1;
 
   var roleIndex = episodeNumberIndex + 2;
