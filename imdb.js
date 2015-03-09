@@ -117,7 +117,6 @@ imdb.findCommonCast = function findCommonCast(searchRoles,cb) {
           _.each(searchRoles, function(searchRole) {
             if(searchRole === role.name) {
               matches[searchRole] = true
-
             }
           })
         })
@@ -156,6 +155,7 @@ imdb.parseRoleLine = function parseRoleLine(line) {
   var re = /([^\(]+) \(([^\)]+)\) ?(\(T?V\) )?(\{([^\(]+ )?\(([^\)]+)\)\})? ? ?(\[([^\]]+)\])?/
   var match = roleText.match(re)
   if(match === null) {
+    console.log(roleText)
     throw new Error('parseRoleLine re doesn\'t match')
   }
   var nameIndex = 1;
