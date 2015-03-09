@@ -6,30 +6,30 @@ var dataDir = './imdb_data/test/'
 var imdb = require('../imdb.js')(dataDir)
 describe('roleParseLine', function() {
   var lines = {
-    'Ghetto Physics (2010)':
+    '\t\t\tGhetto Physics (2010)':
       {
         name: 'Ghetto Physics',
         year: '2010'
       },
-    "Bigkis (2014)  <24>":
+    "\t\t\tBigkis (2014)  <24>":
       {
         name: "Bigkis",
         year: "2014"
       },
-    "Anass (2005)  [Himself]":
+    "\t\t\tAnass (2005)  [Himself]":
       {
         name: "Anass",
         year: "2005",
         role: "Himself"
       },
-    '"Supervivientes: Perdidos en el Caribe" (2006) {(2009-05-07)}  [Himself]':
+    '\t\t\t"Supervivientes: Perdidos en el Caribe" (2006) {(2009-05-07)}  [Himself]':
       {
         name: '"Supervivientes: Perdidos en el Caribe"',
         year: "2006",
         episodeNumber: "2009-05-07",
         role: "Himself"
       },
-    '"Wansapanataym" (2010) {Trick or Trixie (#1.107)}  [Young Trixie\'s Dad]  <11>':
+    '\t\t\t"Wansapanataym" (2010) {Trick or Trixie (#1.107)}  [Young Trixie\'s Dad]  <11>':
       {
         name: '"Wansapanataym"',
         year: "2010",
@@ -37,10 +37,23 @@ describe('roleParseLine', function() {
         role: "Young Trixie's Dad",
         episodeNumber: "#1.107"
       },
-    'E.R. Sluts (2003) (V)  <12>':
+    '\t\t\tE.R. Sluts (2003) (V)  <12>':
       {
         name: 'E.R. Sluts',
         year: '2003'
+      },
+    "\t\t\tSuperman Returns (2006)  [15-Year-Old Clark\t]  <18>":
+      {
+        name: "Superman Returns",
+        year: "2006",
+        role: "15-Year-Old Clark"
+      },
+    "\t\t\tOMG Zombies!! :( (2007)  [Sergio]":
+      {
+        name: "OMG Zombies!! :(",
+        year: "2007",
+        role: "Sergio"
+
       }
   }
   _.each(lines, function(role, line) {

@@ -148,13 +148,35 @@ imdb.findCommonCast = function findCommonCast(searchRoles,cb) {
   }
 }
 imdb.parseRoleLine = function parseRoleLine(line) {
+  //split up by tabs
   var lineParts = line.split('\t');
-  var roleText = lineParts[lineParts.length - 1]
+
+  //we want all content after first set of tabs
+  var roleIndexToSearch = 1;
+  var rolePart = lineParts[roleIndexToSearch]
+  //find the first role part that has content
+  while(rolePart === '') {
+    roleIndexToSearch ++;
+    rolePart = lineParts[roleIndexToSearch]
+  }
+  //our text is this index in array plus all the next
+  var roleText = lineParts.slice(roleIndexToSearch).join("\t")
+
+  var substitutions = {
+    ':(': 'METAFROWNYFACE'
+  }
+  _.each(substitutions, function(replace, search) {
+    while(roleText.indexOf(search) !== -1) {
+      roleText = roleText.replace(search, replace)
+    }
+  })
+
   var role = {}
           //Title    Year          OptionalTV Ep Title     Number              Role
   var re = /([^\(]+) \(([^\)]+)\) ?(\(T?V\) )?(\{([^\(]+ )?\(([^\)]+)\)\})? ? ?(\[([^\]]+)\])?/
   var match = roleText.match(re)
   if(match === null) {
+    console.log(line)
     console.log(roleText)
     throw new Error('parseRoleLine re doesn\'t match')
   }
@@ -171,6 +193,15 @@ imdb.parseRoleLine = function parseRoleLine(line) {
   addToRoleIfDefined('role', roleIndex)
   addToRoleIfDefined('episode', episodeTitleIndex)
   addToRoleIfDefined('episodeNumber', episodeNumberIndex)
+
+  _.each(role, function (roleValue, roleKey) {
+    _.each(substitutions, function(search, replace) {
+      while(roleValue.indexOf(search) !== -1) {
+        roleValue = roleValue.replace(search, replace);
+      }
+      role[roleKey] = roleValue
+    })
+  })
 
   return role
 
