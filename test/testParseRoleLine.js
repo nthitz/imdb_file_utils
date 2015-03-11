@@ -57,6 +57,7 @@ describe('roleParseLine', function() {
       }
   }
   _.each(lines, function(role, line) {
+    // TODO should allow for more customizable message
     it('should parse line ' + line, function() {
       expect(imdb.parseRoleLine(line)).to.deep.equal(role)
     })
