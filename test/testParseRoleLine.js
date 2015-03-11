@@ -2,7 +2,7 @@ var _ = require('lodash')
 var chai = require('chai')
 var assert = chai.assert;
 var expect = chai.expect;
-var dataDir = './imdb_data/test/'
+var dataDir = './data/test/'
 var imdb = require('../imdb.js')(dataDir)
 describe('roleParseLine', function() {
   var lines = {

@@ -2,7 +2,7 @@ var chai = require('chai')
 var assert = chai.assert;
 var expect = chai.expect;
 var imdb = require('../imdb.js')
-var dataDir = './imdb_data/'
+var dataDir = './data/'
 
 describe('dataPath', function() {
   describe('dataPathExists', function() {

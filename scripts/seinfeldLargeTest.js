@@ -1,5 +1,5 @@
 var imdb = require('../imdb.js');
-imdb('imdb_data/');
+imdb('data/');
 imdb.findCommonCast([
   '"Seinfeld"',
   '"Jake and the Fatman"'
